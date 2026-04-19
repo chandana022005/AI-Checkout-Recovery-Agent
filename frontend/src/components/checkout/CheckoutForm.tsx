@@ -186,7 +186,7 @@ export const CheckoutForm = ({ onSuccess, onTyping, shippingCost, onShippingType
               <span className="text-[14px] text-[hsl(var(--checkout-text))]">Standard</span>
             </div>
             <span className="text-[14px] font-medium text-[hsl(var(--checkout-text))]">
-              {shippingType === "standard" && shippingCost === 0 ? "FREE" : "$15.00"}
+              {shippingType === "standard" && shippingCost === 0 ? "FREE" : "₹15.00"}
             </span>
           </label>
           <label className={`flex items-center justify-between p-4 border-t border-[hsl(var(--checkout-divider))] cursor-pointer transition-colors ${shippingType === "express" ? "bg-[hsl(var(--checkout-summary-bg))]" : "bg-white"}`}>
@@ -204,7 +204,7 @@ export const CheckoutForm = ({ onSuccess, onTyping, shippingCost, onShippingType
               <span className="text-[14px] text-[hsl(var(--checkout-text))]">Express (1-2 business days)</span>
             </div>
             <span className="text-[14px] font-medium text-[hsl(var(--checkout-text))]">
-              {shippingType === "express" && shippingCost === 0 ? "FREE" : "$30.00"}
+              {shippingType === "express" && shippingCost === 0 ? "FREE" : "₹30.00"}
             </span>
           </label>
         </div>

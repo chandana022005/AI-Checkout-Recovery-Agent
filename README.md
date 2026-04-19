@@ -1,37 +1,46 @@
 # Pragya: Real-Time Decision Engine for Checkout Recovery
-**Team Pragya | KASPARRO Agentic Commerce Hackathon**
+
+> "Our system combines behavioral signals, cart intelligence, and AI reasoning to intervene only when necessary and maximize conversion."
+
+**Team Pragya | KASPARRO Agentic Commerce Hackathon**  
 *Chandana S & Hitendra S | CMR Institute of Technology, Bangalore*
 
 ---
 
 ## 🌟 The Problem
-Abandoned carts are the biggest challenge in e-commerce. Conventional recovery methods (emails/SMS) are reactive. Pragya is a proactive, minimal-intervention agent that detects friction and makes real-time decisions to save the sale.
+Abandoned carts are the biggest challenge in e-commerce. Conventional recovery methods (emails/SMS) are highly reactive and often completely ignored. Pragya is a proactive, minimal-intervention agent that detects friction at the exact moment of checkout and makes real-time, context-aware decisions to save the sale.
 
-## 🧠 Diagnostic Thinking Engine
-Pragya uses a specialized **Decision Matrix** to diagnose friction before offering solutions. This ensures a premium, non-pushy experience.
+This is **NOT** a standard chatbot. It is an **AI-powered checkout conversion engine** with contextual reasoning.
+
+## 🧠 Diagnostic Thinking Engine (Backend Logic)
+Pragya uses a specialized **Decision Matrix** injected directly into Google Gemini 2.5 Flash to diagnose friction before ever offering solutions. The AI is fed real-time contextual data:
+- Cart Total & Threshold Deltas (`amount_needed` for free shipping)
+- Current Cart Items
+- User Search History
+- Multi-turn Chat History (Continuity)
 
 ### 🔄 Multi-Scenario Intervention
-Pragya is trained to handle the 4 most critical checkout bottlenecks:
+Pragya handles the 4 most critical checkout bottlenecks with sophisticated reasoning:
 
-| Intent | AI Strategy | Real-Time Decision |
+| Intent | AI Strategy | Real-Time Decision Logic |
 | :--- | :--- | :--- |
-| **Shipping Friction** | `suggest_addon` | Calculates the exact $18/$28 gap to unlock **FREE shipping** and suggests relevant items. |
-| **Price Hesitation** | `explain_value` | Validates user concerns by explaining the premium quality and long-term value of the products. |
-| **Delivery Logic** | `clarify_info` | Differentiates between **Express (1-2 days)** and **Standard (3-5 days)** delivery to remove uncertainty. |
-| **Trust & Safety** | `reassure_user` | Confirms security protocols and highlights the **7-day return policy**. |
+| **Shipping Friction** | `suggest_addon` | Dynamically calculates the gap to free shipping. Suggests highly relevant add-ons (e.g., Coasters for Mugs) ONLY if the user is close to the threshold (≤ ₹300). |
+| **Price Hesitation** | `explain_value` | Validates user concerns by explaining the premium quality and long-term value, adopting a confident, high-end brand tone. |
+| **Delivery Logic** | `clarify_info` | Differentiates between Express and Standard delivery policies based on the user's active checkout selection. |
+| **Trust & Safety** | `reassure_user` | Confirms security protocols and highlights the 7-day return policy without defaulting to it unnecessarily. |
+| **Idle User** | `no_intervention` | Detects idle behavior. If the user doesn't explicitly need help, the AI returns a `no_intervention` strategy to remain invisible and non-pushy. |
 
----
+## 🏗️ Architecture & UX Design
 
-## 🛡️ Demo-Proof Resilience (Backup Brain)
-Pragya is built for production environments. It includes a **Keyword Safety Net** that allows the agent to function even if the primary AI API reaches its quota limit. This ensures the customer always gets a helpful answer.
+### The Backend Brain
+- **Node.js / Express**: High-performance orchestration layer.
+- **Strict JSON Enforcement**: The prompt mandates a strict JSON schema. The backend includes an advanced salvage parser to rescue truncated responses (e.g., due to MAX_TOKENS limits), ensuring the server never crashes.
+- **Explainable AI**: The output schema includes a `confidence` score (0-1) and a `reasoning` field, allowing evaluators to see exactly *why* the AI chose its intervention strategy.
 
----
-
-## 🛠 Tech Stack
-- **Backend**: Node.js / Express (High Performance)
-- **AI Core**: Google Gemini 1.5 Flash (Low-latency Reasoning)
-- **Frontend**: React / Tailwind CSS / Vite (High-Fidelity UX)
-- **Thresholds**: Dynamic calculation for $100 (Standard) and $110 (Express) free shipping.
+### The Shopify-Premium Frontend
+- **React / Tailwind CSS**: High-Fidelity UX matching modern, premium e-commerce standards.
+- **Glassmorphism & Minimalism**: The chat UI utilizes clean borders, subtle shadows, and native input styling that perfectly mirrors the native checkout form, completely eliminating the "third-party widget" feel.
+- **Seamless Add-ons**: Suggested products appear directly in the chat with a 1-click "Add" button, instantly updating the cart state and recalculating shipping costs.
 
 ---
 
@@ -51,9 +60,8 @@ PORT=3001
 ```
 
 ### 3. Running
-**Backend**: `cd backend && node server.js`
+**Backend**: `cd backend && node server.js`  
 **Frontend**: `cd frontend && npm run dev`
 
 ---
 **Pragya** - *The Wisdom of Agentic Commerce.*
-

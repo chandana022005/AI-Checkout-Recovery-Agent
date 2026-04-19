@@ -6,9 +6,7 @@ export const CheckoutHeader = () => {
       </h1>
       <nav aria-label="Breadcrumb" className="mt-4">
         <ol className="flex items-center gap-2 text-[13px] text-[hsl(var(--checkout-text-subdued))]">
-          <li>
-            <a className="checkout-link">Cart</a>
-          </li>
+          <li>Cart</li>
           <li>
             <ChevronRight />
           </li>
@@ -21,7 +19,7 @@ export const CheckoutHeader = () => {
             <ChevronRight />
           </li>
           <li>
-            <a className="checkout-link">Payment</a>
+            <span className="text-[hsl(var(--checkout-text))] font-medium">Payment</span>
           </li>
         </ol>
       </nav>

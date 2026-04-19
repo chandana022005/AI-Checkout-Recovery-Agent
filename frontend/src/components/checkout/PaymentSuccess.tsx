@@ -111,14 +111,14 @@ export const PaymentSuccess = ({ email, total, products, onContinue }: PaymentSu
               </ul>
             </div>
             <div className="border-t border-[hsl(var(--checkout-summary-border))] p-6 space-y-2">
-              <Row label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
+              <Row label="Subtotal" value={`₹${subtotal.toFixed(2)}`} />
               <Row label="Shipping" value="FREE" />
               <div className="pt-3 mt-3 border-t border-[hsl(var(--checkout-summary-border))] flex items-baseline justify-between">
                 <span className="text-[16px] text-[hsl(var(--checkout-text))]">Total</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[12px] text-[hsl(var(--checkout-text-subdued))]">USD</span>
+                  <span className="text-[12px] text-[hsl(var(--checkout-text-subdued))]">INR</span>
                   <span className="text-[22px] font-semibold text-[hsl(var(--checkout-text))]">
-                    ${total.toFixed(2)}
+                    ₹{total.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -174,7 +174,7 @@ const SummaryItem = ({
       <p className="text-[14px] font-medium text-[hsl(var(--checkout-text))] truncate">{name}</p>
       <p className="text-[13px] text-[hsl(var(--checkout-text-subdued))]">{variant}</p>
     </div>
-    <span className="text-[14px] text-[hsl(var(--checkout-text))] font-medium">${price.toFixed(2)}</span>
+    <span className="text-[14px] text-[hsl(var(--checkout-text))] font-medium">₹{price.toFixed(2)}</span>
   </li>
 );
 

@@ -13,7 +13,7 @@ const initialProducts: Product[] = [
     id: 1,
     name: "Classic Ceramic Mug",
     variant: "White / 12oz",
-    price: 18.0,
+    price: 399.0,
     qty: 1,
     image: mugImg,
   },
@@ -21,7 +21,7 @@ const initialProducts: Product[] = [
     id: 2,
     name: "Essential Cotton Tee",
     variant: "Black / Medium",
-    price: 32.0,
+    price: 499.0,
     qty: 2,
     image: tshirtImg,
   },
@@ -46,7 +46,7 @@ export const CheckoutPage = () => {
   
   const [idleTime, setIdleTime] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
-  const [hasIntervened, setHasIntervened] = useState(false);
+  const [lastInterventionTime, setLastInterventionTime] = useState(0);
   
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -57,13 +57,13 @@ export const CheckoutPage = () => {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const cartTotal = products.reduce((sum, p) => sum + p.price * p.qty, 0);
-  const freeShippingThreshold = 100;
+  const freeShippingThreshold = 1500;
   
   const getShippingCost = () => {
     if (shippingType === "express") {
-      return cartTotal >= 110 ? 0 : 30;
+      return cartTotal >= 1500 ? 0 : 30;
     }
-    return cartTotal >= 100 ? 0 : 15;
+    return cartTotal >= 1500 ? 0 : 15;
   };
   
   const shippingCost = getShippingCost();
@@ -98,7 +98,9 @@ export const CheckoutPage = () => {
 
   useEffect(() => {
     const checkHesitation = async () => {
-      if (hasIntervened) return;
+      // Don't intervene if the chat is already open or if we recently intervened (within last 60 seconds)
+      const now = Date.now();
+      if (isChatOpen || (now - lastInterventionTime < 60000)) return;
       
       let score = 0;
       if (idleTime >= 20) score += 1;
@@ -106,7 +108,7 @@ export const CheckoutPage = () => {
       if (idleTime >= 20) score += 1;
 
       if (score >= 2) {
-        setHasIntervened(true);
+        setLastInterventionTime(Date.now());
         try {
           const response = await fetch("http://localhost:3001/api/recover", {
             method: "POST",
@@ -147,7 +149,7 @@ export const CheckoutPage = () => {
     };
 
     checkHesitation();
-  }, [idleTime, isTyping, cartTotal, products, hasIntervened]);
+  }, [idleTime, isTyping, cartTotal, products, isChatOpen, lastInterventionTime]);
 
   const handleSendMessage = async (message: string) => {
     const userMessage: ChatMessage = {
@@ -168,6 +170,7 @@ export const CheckoutPage = () => {
           shipping_cost: shippingCost,
           shipping_type: shippingType,
           user_message: message,
+          chat_history: chatMessages.map(m => ({ role: m.role, text: m.text })).slice(-5), // Send last 5 messages
           event: "user_enquiry",
           idle_time: 0,
           user_typing: true,
