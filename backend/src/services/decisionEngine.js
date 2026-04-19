@@ -50,15 +50,17 @@ const decisionEngine = {
      */
     buildPrompt: (context) => {
         const ctx = decisionEngine.getShippingContext(context.shipping_type);
-        
+        const itemNames = (context.items || []).map(i => i.name).join(', ');
+
         return `
 Role: Elite E-commerce Assistant (Pragya).
-Context: ${context.shipping_type || 'standard'} shipping. History: ${JSON.stringify(context.search_history || [])}.
+Context: ${context.shipping_type || 'standard'} shipping. History: ${JSON.stringify(context.search_history || [])}. Current Cart: ${itemNames}
 Current State: Shipping Cost $${context.shipping_cost}, Total $${context.cart_total}.
 
 SCENARIO RULES:
 1. SHIPPING_CONCERN: If msg contains "shipping" or "delivery price". 
-   - If cost > 0: "You are only $${ctx.gap} away from FREE delivery! I suggest adding our ${ctx.addonName} to bridge the gap."
+   - If cost > 0: INVENT a relevant, complimentary product that perfectly matches their cart/history and costs exactly $${ctx.gap}.
+     Response format: "You are only $${ctx.gap} away from FREE delivery! I suggest adding the [Invented Product Name] to bridge the gap."
    - If cost == 0: "You're already eligible for FREE shipping! It will arrive in ${ctx.deliveryTime}."
 
 2. PRICE_HESITATION: If msg contains "expensive", "price", "too much".
@@ -72,12 +74,12 @@ SCENARIO RULES:
 
 5. EMPTY_MSG: "Hi there! I'm your Pragya shopping assistant. I noticed you've been reviewing your cart—is it the price, delivery, or something else? I'm here to help."
 
-Output ONLY JSON:
+Output ONLY JSON matching this schema exactly:
 {
   "intent": "string",
   "strategy": "string",
   "response": "string",
-  "suggested_action": { "type": "add_product", "product": { "name": "${ctx.addonName}", "price": ${ctx.gap} } } | null
+  "suggested_action": { "type": "add_product", "product": { "name": "INVENTED_NAME_HERE", "price": ${ctx.gap} } } | null
 }`;
     },
 
