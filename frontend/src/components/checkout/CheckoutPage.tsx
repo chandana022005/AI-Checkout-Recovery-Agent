@@ -98,7 +98,6 @@ export const CheckoutPage = () => {
 
   useEffect(() => {
     const checkHesitation = async () => {
-      // Don't intervene if the chat is already open or if we recently intervened (within last 60 seconds)
       const now = Date.now();
       if (isChatOpen || (now - lastInterventionTime < 60000)) return;
       
@@ -170,7 +169,7 @@ export const CheckoutPage = () => {
           shipping_cost: shippingCost,
           shipping_type: shippingType,
           user_message: message,
-          chat_history: chatMessages.map(m => ({ role: m.role, text: m.text })).slice(-5), // Send last 5 messages
+          chat_history: chatMessages.map(m => ({ role: m.role, text: m.text })).slice(-5),
           event: "user_enquiry",
           idle_time: 0,
           user_typing: true,
@@ -213,7 +212,7 @@ export const CheckoutPage = () => {
       {
         id: Date.now(),
         name: product.name,
-        variant: "One Size", // Default variant
+        variant: "One Size",
         price: product.price,
         qty: 1,
         image: mugImg,

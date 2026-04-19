@@ -9,7 +9,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-// Global error handlers to prevent silent crashes
 process.on('uncaughtException', (err) => {
   console.error('🔥 UNCAUGHT EXCEPTION:', err);
 });
@@ -44,14 +43,11 @@ async function getAiDecision(prompt, model) {
     } catch (parseError) {
       console.error("Failed to parse AI JSON directly:", parseError);
 
-      // Auto-fix truncated JSON if finishReason was MAX_TOKENS or it just stopped abruptly
       let fixedText = responseText;
       if (!fixedText.endsWith('}')) {
-        // If it was cut off inside a string, close the string
         if ((fixedText.match(/"/g) || []).length % 2 !== 0) {
           fixedText += '"';
         }
-        // Try to close JSON based on how many braces/brackets are open
         fixedText += "\n  },\n  \"suggested_action\": null\n}";
       }
 
@@ -61,7 +57,6 @@ async function getAiDecision(prompt, model) {
         return salvaged;
       } catch (e) {
         console.error("Could not salvage JSON.");
-        // Fallback in case there are markdown backticks
         const firstBrace = responseText.indexOf('{');
         const lastBrace = responseText.lastIndexOf('}');
         if (firstBrace !== -1 && lastBrace !== -1 && firstBrace !== lastBrace) {
@@ -71,7 +66,6 @@ async function getAiDecision(prompt, model) {
             console.error("Markdown fallback failed.");
           }
         }
-        // Final fallback to prevent server crash
         return {
           confidence: 1.0,
           reasoning: "Internal parsing error fallback",
@@ -125,7 +119,6 @@ app.post('/api/recover', async (req, res) => {
     const gap = freeShippingThreshold - (cart_total || 0);
     const amount_needed = gap > 0 ? gap : 0;
 
-    // Determine a dynamic add-on suggestion based on cart items
     let suggestedAddon;
     const cartItemsStr = JSON.stringify(items).toLowerCase();
 
@@ -157,7 +150,6 @@ app.post('/api/recover', async (req, res) => {
       storeContext
     };
 
-    // 2. The Powerful System Prompt + Context Injection
     const prompt = `
 You are Pragya Store Assistant, a professional e-commerce checkout assistant. When greeting the user for the first time, introduce yourself as the Pragya Store Assistant.
 
@@ -237,7 +229,6 @@ Also include a confidence score (0-1) for your decision.
 }
 `;
 
-    // Let Gemini generate the decision using full checkout context. Do not fall back to hardcoded replies.
     let aiDecision = await getAiDecision(prompt, model);
 
     if (!aiDecision) {
@@ -257,5 +248,4 @@ app.listen(PORT, () => {
   console.log('Press Ctrl+C to stop');
 });
 
-// Keep the process alive
 setInterval(() => { }, 1000000);

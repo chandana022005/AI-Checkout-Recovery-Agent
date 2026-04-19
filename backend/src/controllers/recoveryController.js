@@ -8,7 +8,6 @@ const recoveryController = {
      */
     processRecovery: async (req, res) => {
         try {
-            // 1. Destructure and set defaults
             const {
                 cart_total = 0,
                 items = [],
@@ -23,31 +22,25 @@ const recoveryController = {
 
             const context = { cart_total, items, shipping_cost, shipping_type, search_history };
 
-            // 2. Profit-Aware Decision: Should we intervene?
             if (!decisionEngine.shouldIntervene(cart_total, event, idle_time, user_typing)) {
                 return res.json({ intervention_triggered: false });
             }
 
-            // 3. System Health Check
             if (!aiService.isConfigured()) {
                 logger.error('RecoveryController', 'API Keys missing.');
                 return res.json({ intent: "error", response: "⚠️ AI Key Missing", intervention_triggered: true });
             }
 
-            // 4. Build Prompt
             const prompt = decisionEngine.buildPrompt(context);
             
-            // 5. Query AI
             logger.info('RecoveryController', 'Querying Gemini for decision...');
             let aiDecision = await aiService.getDecision(prompt);
 
-            // 6. Fail-Safe / Fallback Logic
             if (!aiDecision) {
                 logger.warn('RecoveryController', 'Falling back to rule-based logic.');
                 aiDecision = decisionEngine.runFallbackLogic(user_message, context);
             }
 
-            // 7. Return Result
             logger.info('RecoveryController', `Returning decision: Strategy=${aiDecision.strategy}`);
             aiDecision.intervention_triggered = true;
             return res.json(aiDecision);

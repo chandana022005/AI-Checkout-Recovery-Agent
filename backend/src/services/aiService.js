@@ -1,7 +1,6 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const logger = require('../utils/logger');
 
-// Initialize Gemini only if key exists to prevent crashing during boot
 const genAI = process.env.GEMINI_API_KEY 
     ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) 
     : null;
@@ -36,13 +35,12 @@ const aiService = {
                 contents: [{ role: "user", parts: [{ text: prompt }] }],
                 generationConfig: {
                     maxOutputTokens: 1000,
-                    temperature: 0.1, // Low temp for more deterministic JSON constraint
+                    temperature: 0.1,
                 }
             });
 
             const responseText = result.response.text().trim();
             
-            // Extract JSON from markdown or raw text
             const firstBrace = responseText.indexOf('{');
             const lastBrace = responseText.lastIndexOf('}');
             

@@ -51,14 +51,9 @@ export default function CheckoutAssistant({ cartItems, cartTotal, shippingCost, 
       const aiText = json.response || 'Sorry — no answer.'
       setMessages(m => [...m, { from: 'ai', text: aiText }])
 
-      // If AI suggests an add_product action, surface it
       if (json.suggested_action && json.suggested_action.type === 'add_product' && json.suggested_action.product) {
         const prod = json.suggested_action.product
         setMessages(m => [...m, { from: 'ai', text: `Suggested: ${prod.name} — ₹${prod.price}` }])
-        // Optionally auto-call provided callback
-        // Do not auto-add; provide a button below for user action
-        // Save suggested product to state for the UI
-        // We'll attach it to the last message via component-level state below
         setSuggested(prod)
       }
 

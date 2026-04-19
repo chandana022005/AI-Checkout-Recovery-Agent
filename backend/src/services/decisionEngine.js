@@ -14,7 +14,6 @@ const decisionEngine = {
      * @returns {boolean} True if intervention is authorized.
      */
     shouldIntervene: (cartTotal, event, idleTime, userTyping) => {
-        // 1. Event trigger
         let triggered = false;
         if (event === 'user_enquiry' || (idleTime >= storeConfig.profitRules.minIdleTimeSeconds && !userTyping)) {
             triggered = true;
@@ -22,7 +21,6 @@ const decisionEngine = {
         
         if (!triggered) return false;
 
-        // 2. Profit-Aware Bypass (Ignore low value carts)
         if (cartTotal < storeConfig.profitRules.minCartValueForIntervention) {
             logger.info('DecisionEngine', `Skipping intervention. Cart value ($${cartTotal}) below minimum threshold.`);
             return false;
