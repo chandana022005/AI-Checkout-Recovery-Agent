@@ -31,7 +31,9 @@ export const ChatWidget = ({
   isLoading
 }: ChatWidgetProps) => {
   const [inputValue, setInputValue] = useState("");
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -48,6 +50,47 @@ export const ChatWidget = ({
     if (!inputValue.trim() || isLoading) return;
     onSendMessage(inputValue);
     setInputValue("");
+  };
+
+  const toggleVoice = () => {
+    if (isListening) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsListening(false);
+      return;
+    }
+
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Your browser does not support voice input.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const current = event.resultIndex;
+      const transcript = event.results[current][0].transcript;
+      setInputValue((prev) => (prev ? `${prev} ${transcript}` : transcript));
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   return (
@@ -112,13 +155,12 @@ export const ChatWidget = ({
             )}
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] rounded-lg px-4 py-3 ${
-                  msg.role === "user" 
-                    ? "bg-[hsl(var(--checkout-text))] text-white rounded-br-sm shadow-sm" 
+                <div className={`max-w-[85%] rounded-lg px-4 py-3 ${msg.role === "user"
+                    ? "bg-[hsl(var(--checkout-text))] text-white rounded-br-sm shadow-sm"
                     : "bg-white border border-[hsl(var(--checkout-divider))] text-[hsl(var(--checkout-text))] rounded-bl-sm shadow-sm"
-                }`}>
+                  }`}>
                   <p className="text-[14px] leading-[1.5]">{msg.text}</p>
-                  
+
                   {msg.role === "ai" && msg.action?.type === "add_product" && msg.action.product && (
                     <div className="mt-4 pt-4 border-t border-[hsl(var(--checkout-divider))]">
                       <button
@@ -152,6 +194,22 @@ export const ChatWidget = ({
 
           <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-[hsl(var(--checkout-divider))] shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
             <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={toggleVoice}
+                disabled={isLoading}
+                className={`w-[46px] h-[46px] rounded-md flex items-center justify-center text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0 shadow-sm ${isListening
+                    ? "bg-red-500 animate-pulse"
+                    : "bg-[hsl(var(--checkout-text))] hover:bg-black"
+                  }`}
+                title="Voice Input"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="22"></line>
+                </svg>
+              </button>
               <input
                 type="text"
                 value={inputValue}

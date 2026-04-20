@@ -10,7 +10,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3001;
 
 process.on('uncaughtException', (err) => {
-  console.error('🔥 UNCAUGHT EXCEPTION:', err);
+  console.error('UNCAUGHT EXCEPTION:', err);
 });
 
 process.on('unhandledRejection', (reason, promise) => {

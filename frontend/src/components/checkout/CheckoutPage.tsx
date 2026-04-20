@@ -53,8 +53,8 @@ export const CheckoutPage = () => {
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [shippingType, setShippingType] = useState<"standard" | "express">("standard");
   
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const idleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cartTotal = products.reduce((sum, p) => sum + p.price * p.qty, 0);
   const freeShippingThreshold = 1500;

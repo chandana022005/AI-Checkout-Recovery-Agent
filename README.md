@@ -41,6 +41,7 @@ Pragya handles the 4 most critical checkout bottlenecks with sophisticated reaso
 - **React / Tailwind CSS**: High-Fidelity UX matching modern, premium e-commerce standards.
 - **Glassmorphism & Minimalism**: The chat UI utilizes clean borders, subtle shadows, and native input styling that perfectly mirrors the native checkout form, completely eliminating the "third-party widget" feel.
 - **Seamless Add-ons**: Suggested products appear directly in the chat with a 1-click "Add" button, instantly updating the cart state and recalculating shipping costs.
+- **Voice Input Support**: Integrated Web Speech API enables speech-to-text functionality, allowing users to effortlessly dictate their queries directly into the chat widget for a frictionless, hands-free experience.
 
 ---
 
