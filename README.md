@@ -136,10 +136,10 @@ PORT=3001
 ### 3. Running the Project
 ```bash
 # Start Backend (Term 1)
-cd backend && npm start
+cd backend && npm install && node server.js
 
 # Start Frontend (Term 2)
-cd frontend && npm run dev
+cd frontend && npm install && npm run dev
 ```
 
 ---
