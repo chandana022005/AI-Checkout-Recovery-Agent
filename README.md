@@ -1,68 +1,157 @@
-# Pragya: Real-Time Decision Engine for Checkout Recovery
+# 🧠 Pragya: AI-Powered Checkout Recovery Agent
 
-> "Our system combines behavioral signals, cart intelligence, and AI reasoning to intervene only when necessary and maximize conversion."
+[![Status](https://img.shields.io/badge/Status-Hackathon_Project-blueviolet?style=for-the-badge)](https://github.com/chandana022005/AI-Checkout-Recovery-Agent)
+[![Tech](https://img.shields.io/badge/Tech-React_%7C_Node.js_%7C_Gemini-blue?style=for-the-badge)](https://github.com/chandana022005/AI-Checkout-Recovery-Agent)
 
-**Team Pragya | KASPARRO Agentic Commerce Hackathon**  
-*Chandana S & Hitendra S | CMR Institute of Technology, Bangalore*
+> **"Pragya" (Sanskrit: प्रज्ञा)** — *The highest form of wisdom and discernment.*
+
+Pragya is a proactive, minimal-intervention AI agent designed to rescue abandoned carts by detecting friction at the exact moment of checkout. Unlike generic chatbots, Pragya uses **contextual reasoning** and a **specialized decision matrix** to intervene only when necessary, ensuring a frictionless and premium shopping experience.
+
+---
+
+## 📺 Demo & Presentation
+
+🎬 **[Watch the Demo Video](https://drive.google.com/file/d/1g5rUIif_kIuaVvR61usx_5InN708tAmH/view?usp=drivesdk)**
 
 ---
 
 ## 🌟 The Problem
-Abandoned carts are the biggest challenge in e-commerce. Conventional recovery methods (emails/SMS) are highly reactive and often completely ignored. Pragya is a proactive, minimal-intervention agent that detects friction at the exact moment of checkout and makes real-time, context-aware decisions to save the sale.
+Abandoned carts are the biggest challenge in e-commerce, with rates often exceeding 70%. Conventional recovery methods (emails/SMS) are:
+- **Reactive**: Sent hours or days after the user has left.
+- **Static**: One-size-fits-all discounts that hurt margins.
+- **Ignored**: High friction and low open rates.
 
-This is **NOT** a standard chatbot. It is an **AI-powered checkout conversion engine** with contextual reasoning.
-
-## 🧠 Diagnostic Thinking Engine (Backend Logic)
-Pragya uses a specialized **Decision Matrix** injected directly into Google Gemini 2.5 Flash to diagnose friction before ever offering solutions. The AI is fed real-time contextual data:
-- Cart Total & Threshold Deltas (`amount_needed` for free shipping)
-- Current Cart Items
-- User Search History
-- Multi-turn Chat History (Continuity)
-
-### 🔄 Multi-Scenario Intervention
-Pragya handles the 4 most critical checkout bottlenecks with sophisticated reasoning:
-
-| Intent | AI Strategy | Real-Time Decision Logic |
-| :--- | :--- | :--- |
-| **Shipping Friction** | `suggest_addon` | Dynamically calculates the gap to free shipping. Suggests highly relevant add-ons (e.g., Coasters for Mugs) ONLY if the user is close to the threshold (≤ ₹300). |
-| **Price Hesitation** | `explain_value` | Validates user concerns by explaining the premium quality and long-term value, adopting a confident, high-end brand tone. |
-| **Delivery Logic** | `clarify_info` | Differentiates between Express and Standard delivery policies based on the user's active checkout selection. |
-| **Trust & Safety** | `reassure_user` | Confirms security protocols and highlights the 7-day return policy without defaulting to it unnecessarily. |
-| **Idle User** | `no_intervention` | Detects idle behavior. If the user doesn't explicitly need help, the AI returns a `no_intervention` strategy to remain invisible and non-pushy. |
-
-## 🏗️ Architecture & UX Design
-
-### The Backend Brain
-- **Node.js / Express**: High-performance orchestration layer.
-- **Strict JSON Enforcement**: The prompt mandates a strict JSON schema. The backend includes an advanced salvage parser to rescue truncated responses (e.g., due to MAX_TOKENS limits), ensuring the server never crashes.
-- **Explainable AI**: The output schema includes a `confidence` score (0-1) and a `reasoning` field, allowing evaluators to see exactly *why* the AI chose its intervention strategy.
-
-### The Shopify-Premium Frontend
-- **React / Tailwind CSS**: High-Fidelity UX matching modern, premium e-commerce standards.
-- **Glassmorphism & Minimalism**: The chat UI utilizes clean borders, subtle shadows, and native input styling that perfectly mirrors the native checkout form, completely eliminating the "third-party widget" feel.
-- **Seamless Add-ons**: Suggested products appear directly in the chat with a 1-click "Add" button, instantly updating the cart state and recalculating shipping costs.
-- **Voice Input Support**: Integrated Web Speech API enables speech-to-text functionality, allowing users to effortlessly dictate their queries directly into the chat widget for a frictionless, hands-free experience.
+**Pragya solves this by intervening in real-time, directly on the checkout page.**
 
 ---
 
-## 🚀 Getting Started
+## 🧠 System Architecture
+
+Pragya operates as a sophisticated bridge between the user's behavioral signals and the brand's business logic.
+
+```mermaid
+graph TD
+    User((User))
+    
+    subgraph Frontend [React + Vite]
+        UI[Chat Widget & UI]
+        Voice[Web Speech API - Voice Input]
+        Monitor[Behavior Monitor: Idle, Typing, Cart Changes]
+    end
+    
+    subgraph Backend [Node.js + Express]
+        API[Recovery API Endpoint]
+        Context[Context Aggregator: Cart, History, Policies]
+        Parser[JSON Salvage Parser]
+    end
+    
+    subgraph AI_Engine [Google Gemini 2.5 Flash]
+        Prompt[Decision Matrix Prompt]
+        Reasoning[Intent Diagnosis & Strategy]
+    end
+    
+    User <--> UI
+    UI --> Monitor
+    Monitor -- "Event Trigger" --> API
+    Voice -- "Speech-to-Text" --> UI
+    API --> Context
+    Context -- "Contextual Payload" --> Prompt
+    Prompt --> Reasoning
+    Reasoning -- "Structured JSON Response" --> Parser
+    Parser -- "Intervention Strategy" --> UI
+```
+
+---
+
+## 🚀 Key Features
+
+### 1. Context-Aware Diagnostic Engine
+Pragya doesn't just "chat." It analyzes:
+- **Cart Thresholds**: Calculates the exact gap for free shipping.
+- **User Intent**: Differentiates between price hesitation, shipping confusion, and idle behavior.
+- **Search History**: Leverages past searches to provide personalized product recommendations.
+
+### 2. Intelligent Intervention Strategies
+| Strategy | Trigger | Action |
+| :--- | :--- | :--- |
+| **Shipping Recovery** | User near free shipping threshold (≤ ₹300). | Suggests a relevant low-cost add-on to unlock free shipping. |
+| **Value Reinforcement** | User expresses price hesitation. | Confidently explains premium quality and craftsmanship. |
+| **Policy Clarification** | User asks about delivery or returns. | Provides precise info based on real-time checkout selections. |
+| **Minimalist "Idle" Check** | User is inactive for >20 seconds. | Gentle nudge to assist without being intrusive. |
+
+### 3. Voice-to-Text Integration
+Integrated **Web Speech API** allows users to dictate queries hands-free, reducing checkout friction and improving accessibility.
+
+### 4. Robust Engineering
+- **Strict JSON Enforcement**: Ensures AI responses are always machine-readable.
+- **Salvage Parser**: Advanced backend logic to rescue truncated AI responses, preventing system crashes.
+- **Explainable AI**: Every decision includes a `confidence` score and `reasoning` field for transparent auditing.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, Vite, Tailwind CSS, Shadcn UI, Lucide Icons.
+- **Backend**: Node.js, Express.
+- **AI**: Google Gemini 2.5 Flash / Pro (Generative AI SDK).
+- **Communication**: RESTful API, JSON-based State Management.
+
+---
+
+## 📂 Project Structure
+
+```text
+AI-checkout-assistant/
+├── frontend/           # React + Vite Application
+│   ├── src/
+│   │   ├── components/ # Shadcn UI & Custom Components
+│   │   ├── hooks/      # Voice & Behavior Monitoring
+│   │   └── App.tsx     # Main Checkout Experience
+├── backend/            # Express Server
+│   ├── server.js       # Core Orchestration & AI Logic
+│   └── .env            # Configuration
+└── README.md           # Project Documentation
+```
+
+---
+
+## ⚙️ Getting Started
 
 ### 1. Installation
 ```bash
+# Install Backend Dependencies
 cd backend && npm install
+
+# Install Frontend Dependencies
 cd ../frontend && npm install
 ```
 
 ### 2. Configuration
 Create a `.env` file in the `backend` directory:
 ```env
-GEMINI_API_KEY=your_key_here
+GEMINI_API_KEY=your_google_gemini_api_key
 PORT=3001
 ```
 
-### 3. Running
-**Backend**: `cd backend && node server.js`  
-**Frontend**: `cd frontend && npm run dev`
+### 3. Running the Project
+```bash
+# Start Backend (Term 1)
+cd backend && npm start
+
+# Start Frontend (Term 2)
+cd frontend && npm run dev
+```
 
 ---
-**Pragya** - *The Wisdom of Agentic Commerce.*
+
+## 👥 The Team
+
+- **Chandana S** - *AI & Backend Lead*  
+- **Hitendra S** - *Frontend & Integration Lead*  
+
+*Developed for the KASPARRO Agentic Commerce Hackathon.*
+
+---
+
+**Pragya** - *Turning Checkout Friction into Conversions with AI Wisdom.*
+
