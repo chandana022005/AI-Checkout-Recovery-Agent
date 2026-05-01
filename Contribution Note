@@ -1,0 +1,19 @@
+This project was developed as a team effort with clear separation of responsibilities between product thinking, backend logic, and frontend implementation.
+
+ *Chandana S (AI & Backend Lead)*
+* Designed the core AI-driven decision engine for checkout recovery
+* Developed backend APIs and integrated the generative AI model
+* Engineered prompt design, intent handling, and response generation logic
+* Implemented business logic such as shipping threshold calculations and add-on recommendation system
+
+ *Hitendra S (Frontend & Integration Lead)* 
+* Designed and developed the checkout interface and chatbot UI
+* Implemented hesitation detection using user interaction signals (idle time, activity tracking)
+* Integrated frontend with backend APIs for real-time communication
+* Developed voice input/output features and overall user interaction flow
+
+ *Collaborative Work* 
+* System architecture design and overall product strategy
+* Testing with real-world scenarios and refining AI responses
+* Designing user experience to ensure minimal and non-intrusive interaction
+* Preparing documentation and demo presentation
